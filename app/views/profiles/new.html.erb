@@ -1,0 +1,7 @@
+<%= form_for @profile, url: profiles_path, method: :post do |f| %>
+  <%= f.text_field :name, placeholder: "Name" %>
+  <%= f.text_area :bio, placeholder: "Bio" %>
+  <%= f.text_field :location, placeholder: "Location" %>
+  <%= f.text_field :avatar %>
+  <%= f.submit "Save" %>
+<% end %>
