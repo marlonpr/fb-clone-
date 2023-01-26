@@ -1,0 +1,12 @@
+<h1>Profile</h1>
+<p>Name: <%= @profile.name%></p>
+<p>Bio: <%= @profile.bio%></p>
+<p>Location: <%= @profile.location%></p>
+
+<% if @profile.id == current_user.id %>
+  <%= link_to 'Edit profile', edit_profile_path  %>
+<% end %>
+
+
+
+

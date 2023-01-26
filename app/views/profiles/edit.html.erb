@@ -1,0 +1,16 @@
+<h1>Edit Profile</h1>
+
+<%= form_for @profile do |f| %>
+
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  
+  <%= f.label :bio %>
+  <%= f.text_area :bio %>
+
+  <%= f.label :location %>
+  <%= f.text_field :location %>
+
+  <%= f.submit "Update Profile" %>
+<% end %>
+

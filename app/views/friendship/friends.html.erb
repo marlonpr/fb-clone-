@@ -1,0 +1,12 @@
+<h1>My Friends</h1>
+<ul>
+  <% @friends.uniq.each do |friend| %>
+    <li>
+      <%= friend.email %>
+      <%= link_to 'Show profile', profile_path(friend.id) %>
+      <%= button_to "Unfriend", remove_friend_path(friend.id), 
+          method: :delete, data: { confirm: "Are you sure you want to unfriend #{friend.email}?" } 
+      %>
+    </li>
+  <% end %>
+</ul>

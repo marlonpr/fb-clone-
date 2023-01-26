@@ -1,9 +1,25 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!
-  #before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :set_post, only: [:show, :edit, :update, :destroy]
+
+  def friends_by_accepting
+    Friendship.accepted(current_user.id).map do |accepted|
+      User.find(accepted.sender_id)
+    end
+  end
+
+  def friends_by_sending
+    Friendship.accepted_send(current_user.id).map do |accepted|
+      User.find(accepted.receiver_id)
+    end
+  end
+
+  def friends
+    @friends = friends_by_accepting + friends_by_sending
+  end
 
   def index
-    friends = Friendship.accepted(current_user.id)
+    @comment = Comment.new
     current_user_posts = current_user.posts
     friends_posts = Post.where(user_id: friends)
     all_posts = current_user_posts + friends_posts
@@ -26,7 +42,7 @@ class PostsController < ApplicationController
 
     respond_to do |format|
       if @post.save
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
+        format.html { redirect_to root_path, notice: 'Post was successfully created.' }
         format.json { render :show, status: :created, location: @post }
       else
         format.html { render :new }
@@ -62,6 +78,6 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:content)
+    params.require(:post).permit(:content, :title)
   end
 end

@@ -14,4 +14,12 @@ class User < ApplicationRecord
   has_one :bio, through: :profile
   has_one :location, through: :profile
   has_one :name, through: :profile
+
+  after_create :create_profile
+
+  private
+
+  def create_profile
+    Profile.create(name: '', bio: '', location: '', avatar: '')
+  end
 end

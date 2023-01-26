@@ -1,0 +1,22 @@
+<h1>Pending friend request</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Sender</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @pending_friends.each do |friendship| %>
+      <tr>
+        <td><%= friendship.sender.email %></td>
+        <td>
+          <%= button_to "Accept", accept_friend_request_path(id: friendship.id, status: "accepted"), method: :patch %>
+          <%= button_to "Delete", remove_request_path(id: friendship.id ), 
+              method: :delete, data: { confirm: "Are you sure you want to delete?" } 
+          %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

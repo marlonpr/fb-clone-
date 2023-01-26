@@ -1,9 +1,11 @@
 <nav>
   <% if current_user.present? %>
-  <%= link_to "Home", root_path %>
-  <%= link_to 'Profile', user_path([current_user.id]) %>
-  <%= link_to 'Users', users_path %>
-  <%= button_to "Log out", destroy_user_session_path, method: :delete, data: { turbo: false } %>
-    <a href="#">Pending Friend Requests: <%= @pending_friends = Friendship.pending(current_user.id).count %></a>
+    <% @pending_friends = Friendship.pending(current_user.id).count %>
+    <%= link_to "Home", root_path %>
+    <%= link_to 'Profile', profile_path(current_user.id) %>
+    <%= link_to "Friends", friends_path %>
+    <%= link_to 'Users', users_path %>
+    <%= button_to "Log out", destroy_user_session_path, method: :delete, data: { turbo: false } %>
+    <%= link_to "Pending friend request: #{@pending_friends}", friend_request_path %>
   <% end %>
 </nav>

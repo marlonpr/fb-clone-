@@ -1,6 +1,10 @@
 class FriendshipController < ApplicationController
   before_action :authenticate_user!
 
+  def index
+    @pending_friends = Friendship.pending(current_user.id)
+  end
+
   def send_friend_request
     @friendship = Friendship.new(sender: current_user, receiver_id: params[:receiver_id], status: :pending)
     if @friendship.save
@@ -11,22 +15,40 @@ class FriendshipController < ApplicationController
     redirect_to root_path
   end
 
-  def handle_friend_request
+  def accept_friend_request
     @friendship = Friendship.find(params[:id])
     if @friendship.update(status: params[:status])
       flash[:notice] = "Friend request #{params[:status]}"
     else
-      flash[:alert] = "Could not handle friend request"
+      flash[:alert] = "Could not accept friend request"
     end
     redirect_to root_path
   end
 
-  def index
-    @pending_friends = current_user.pending_friends
+  def remove_request
+    @friendship = Friendship.find(params[:id])
+    if @friendship.destroy
+      flash[:notice] = "Friend request removed"
+    else
+      flash[:alert] = "Could not remove friend request"
+    end
+    redirect_to root_path
+  end
+
+  def friends_by_accepting
+    Friendship.accepted(current_user.id).map do |accepted|
+      User.find(accepted.sender_id)
+    end
+  end
+
+  def friends_by_sending
+    Friendship.accepted_send(current_user.id).map do |accepted|
+      User.find(accepted.receiver_id)
+    end
   end
 
   def friends
-    @friends = current_user.friends
+    @friends = friends_by_accepting + friends_by_sending
   end
 
   def remove_friend

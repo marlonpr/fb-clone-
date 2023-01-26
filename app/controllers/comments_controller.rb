@@ -2,7 +2,7 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_post, only: [:create, :destroy]
   before_action :set_comment, only: [:destroy]
-
+  
   def create
     @comment = @post.comments.build(comment_params)
     @comment.user = current_user
@@ -11,7 +11,7 @@ class CommentsController < ApplicationController
     else
       flash[:alert] = "Could not create comment"
     end
-    redirect_to :back
+    redirect_to root_path
   end
 
   def destroy

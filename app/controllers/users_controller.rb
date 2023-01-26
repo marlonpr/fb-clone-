@@ -3,15 +3,22 @@ class UsersController < ApplicationController
 
   def index
     @users = User.all
-    @pending_friends = Friendship.pending(current_user.id)
-    @accepted_friends = Friendship.accepted(current_user.id)
+  end
+
+  def friends_by_accepting
+    Friendship.accepted(current_user.id).map do |accepted|
+      User.find(accepted.sender_id)
+    end
+  end
+
+  def friends_by_sending
+    Friendship.accepted_send(current_user.id).map do |accepted|
+      User.find(accepted.receiver_id)
+    end
   end
 
   def show
     @user = User.find(params[:id])
-    @profile = @user.profile
-    @posts = @user.posts
-    @pending_friends = Friendship.pending(current_user.id)
-    @accepted_friends = Friendship.accepted(current_user.id)
+    @friends = friends_by_accepting + friends_by_sending
   end
 end

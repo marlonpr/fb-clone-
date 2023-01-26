@@ -1,13 +1,23 @@
 <h1>Posts</h1>
+<%= link_to 'Create a new post', new_post_path %><br>
+
 <% @posts.each do |post| %>
+  <div class="post">
+    <div class="post-title">
+    <%= post.title %>
+  </div>
   <div class="post">
     <div class="post-content">
       <%= post.content %>
     </div>
     <div class="post-author">
-      <%= post.user.name %>
+      <%= post.user.email %>
     </div>
     <div class="post-comments">
+    <%= form_for [post, @comment], local: true do |f| %>
+      <%= f.text_area :content, placeholder: "Add a comment..." %>
+      <%= f.submit "Comment" %>
+    <% end %>
       <% post.comments.each do |comment| %>
         <div class="comment">
           <%= comment.content %>
@@ -15,6 +25,7 @@
       <% end %>
     </div>
     <div class="post-likes">
+    <%= button_to "Like", likes_path(post_id: post.id), method: :post%>
       <%= post.likes.count %> likes
     </div>
   </div>
